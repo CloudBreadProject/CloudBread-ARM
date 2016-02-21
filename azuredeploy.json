@@ -3,40 +3,31 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "redis_jhredis_name": {
-      "type": "string",
-      "defaultValue": "jhredis"
+      "type": "string"
     },
-    "namespaces_jh_noti_ns_name": {
-      "type": "string",
-      "defaultValue": "jh-noti-ns"
+    "notiNamespace": {
+      "type": "string"
     },
-    "notificationHubs_jhnoti_name": {
-      "type": "string",
-      "defaultValue": "jhnoti"
+    "notificationHubsName": {
+      "type": "string"
     },
     "servers_jhsqldbserver_name": {
-      "type": "string",
-      "defaultValue": "jhsqldbserver"
+      "type": "string"
     },
     "databases_jh_cloudbread_db_name": {
-      "type": "string",
-      "defaultValue": "jh-cloudbread-db"
+      "type": "string"
     },
     "storageAccounts_jhaccount_name": {
-      "type": "string",
-      "defaultValue": "jhaccount"
+      "type": "string"
     },
     "serverFarms_jh_app_plan_name": {
-      "type": "string",
-      "defaultValue": "jh-app-plan"
+      "type": "string"
     },
     "sites_jh_mobileApp_name": {
-      "type": "string",
-      "defaultValue": "jh-mobileApp"
+      "type": "string"
     },
     "sites_jh_webApp_name": {
-      "type": "string",
-      "defaultValue": "jh-webApp"
+      "type": "string"
     }
   },
   "variables": {},
@@ -62,24 +53,25 @@
   }, {
     "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.NotificationHubs/namespaces/jh-noti-ns",
     "type": "Microsoft.NotificationHubs/namespaces",
-    "name": "[parameters('namespaces_jh_noti_ns_name')]",
+    "name": "[parameters('notiNamespace')]",
     "apiVersion": "2014-09-01",
     "location": "Japan West",
     "properties": {
       "namespaceType": "NotificationHub"
-    }
-  }, {
-    "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.NotificationHubs/namespaces/jh-noti-ns/notificationHubs/jhnoti",
-    "type": "Microsoft.NotificationHubs/namespaces/notificationHubs",
-    "name": "[parameters('notificationHubs_jhnoti_name')]",
-    "apiVersion": "2014-09-01",
-    "location": "Japan West",
-    "properties": {
-      "authorizationRules": []
     },
-    "dependsOn": [
-      "[resourceId('Microsoft.NotificationHubs/namespaces', parameters('namespaces_jh_noti_ns_name'))]"
-    ]
+    "resources": [{
+      "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.NotificationHubs/namespaces/jh-noti-ns/notificationHubs/jhnoti",
+      "type": "notificationHubs",
+      "name": "[parameters('notificationHubsName')]",
+      "apiVersion": "2014-09-01",
+      "location": "Japan West",
+      "properties": {
+        "authorizationRules": []
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.NotificationHubs/namespaces', parameters('notiNamespace'))]"
+      ]
+    }]
   }, {
     "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Sql/servers/jhsqldbserver",
     "type": "Microsoft.Sql/servers",
