@@ -2,7 +2,7 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "redis_jhredis_name": {
+    "redisName": {
       "type": "string"
     },
     "notiNamespace": {
@@ -11,22 +11,22 @@
     "notificationHubsName": {
       "type": "string"
     },
-    "servers_jhsqldbserver_name": {
+    "serverName": {
       "type": "string"
     },
-    "databases_jh_cloudbread_db_name": {
+    "databaseName": {
       "type": "string"
     },
-    "storageAccounts_jhaccount_name": {
+    "storageAccountsName": {
       "type": "string"
     },
-    "serverFarms_jh_app_plan_name": {
+    "planName": {
       "type": "string"
     },
-    "sites_jh_mobileApp_name": {
+    "sitesName_mobile": {
       "type": "string"
     },
-    "sites_jh_webApp_name": {
+    "sitesName_web": {
       "type": "string"
     }
   },
@@ -34,7 +34,7 @@
   "resources": [{
     "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Cache/Redis/jhredis",
     "type": "Microsoft.Cache/Redis",
-    "name": "[parameters('Redis_jhredis_name')]",
+    "name": "[parameters('redisName')]",
     "apiVersion": "2015-08-01",
     "location": "Japan West",
     "properties": {
@@ -76,7 +76,7 @@
     "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Sql/servers/jhsqldbserver",
     "type": "Microsoft.Sql/servers",
     "kind": "v12.0",
-    "name": "[parameters('servers_jhsqldbserver_name')]",
+    "name": "[parameters('serverName')]",
     "apiVersion": "2014-04-01-preview",
     "location": "Japan West",
     "properties": {
@@ -88,7 +88,7 @@
     "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Sql/servers/jhsqldbserver/databases/jh-cloudbread-db",
     "type": "Microsoft.Sql/servers/databases",
     "kind": "v12.0,user",
-    "name": "[parameters('databases_jh_cloudbread_db_name')]",
+    "name": "[parameters('databaseName')]",
     "apiVersion": "2014-04-01-preview",
     "location": "Japan West",
     "properties": {
@@ -108,12 +108,12 @@
       "containmentState": 2
     },
     "dependsOn": [
-      "[resourceId('Microsoft.Sql/servers', parameters('servers_jhsqldbserver_name'))]"
+      "[resourceId('Microsoft.Sql/servers', parameters('serverName'))]"
     ]
   }, {
     "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Storage/storageAccounts/jhaccount",
     "type": "Microsoft.Storage/storageAccounts",
-    "name": "[parameters('storageAccounts_jhaccount_name')]",
+    "name": "[parameters('storageAccountsName')]",
     "apiVersion": "2015-06-15",
     "location": "japanwest",
     "properties": {
@@ -130,22 +130,22 @@
       "capacity": 1
     },
     "kind": "",
-    "name": "[parameters('serverFarms_jh_app_plan_name')]",
+    "name": "[parameters('planName')]",
     "apiVersion": "2015-08-01",
     "location": "Japan West",
     "properties": {
-      "name": "[parameters('serverFarms_jh_app_plan_name')]",
+      "name": "[parameters('planName')]",
       "numberOfWorkers": 1
     }
   }, {
     "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Web/sites/jh-mobileApp",
     "type": "Microsoft.Web/sites",
     "kind": "mobileapp",
-    "name": "[parameters('sites_jh_mobileApp_name')]",
+    "name": "[parameters('sitesName_mobile')]",
     "apiVersion": "2015-08-01-preview",
     "location": "Japan West",
     "properties": {
-      "name": "[parameters('sites_jh_mobileApp_name')]",
+      "name": "[parameters('sitesName_mobile')]",
       "hostNames": [
         "jh-mobileapp.azurewebsites.net"
       ],
@@ -164,19 +164,19 @@
         "thumbprint": null,
         "ipBasedSslState": 0
       }],
-      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_jh_app_plan_name'))]"
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
     },
     "dependsOn": [
-      "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_jh_app_plan_name'))]"
+      "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
     ]
   }, {
     "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Web/sites/jh-webApp",
     "type": "Microsoft.Web/sites",
-    "name": "[parameters('sites_jh_webApp_name')]",
+    "name": "[parameters('sitesName_web')]",
     "apiVersion": "2015-08-01-preview",
     "location": "Japan West",
     "properties": {
-      "name": "[parameters('sites_jh_webApp_name')]",
+      "name": "[parameters('sitesName_web')]",
       "hostNames": [
         "jh-webapp.azurewebsites.net"
       ],
@@ -195,10 +195,10 @@
         "thumbprint": null,
         "ipBasedSslState": 0
       }],
-      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_jh_app_plan_name'))]"
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
     },
     "dependsOn": [
-      "[resourceId('Microsoft.Web/serverFarms', parameters('serverFarms_jh_app_plan_name'))]"
+      "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
     ]
   }]
 }
