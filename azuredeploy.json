@@ -38,7 +38,6 @@
   },
   "variables": {},
   "resources": [{
-    "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Cache/Redis/jhredis",
     "type": "Microsoft.Cache/Redis",
     "name": "[parameters('redisName')]",
     "apiVersion": "2015-08-01",
@@ -57,7 +56,6 @@
       }
     }
   }, {
-    "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.NotificationHubs/namespaces/jh-noti-ns",
     "type": "Microsoft.NotificationHubs/namespaces",
     "name": "[parameters('notiNamespace')]",
     "apiVersion": "2014-09-01",
@@ -66,7 +64,6 @@
       "namespaceType": "NotificationHub"
     },
     "resources": [{
-      "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.NotificationHubs/namespaces/jh-noti-ns/notificationHubs/jhnoti",
       "type": "notificationHubs",
       "name": "[parameters('notificationHubsName')]",
       "apiVersion": "2014-09-01",
@@ -79,7 +76,6 @@
       ]
     }]
   }, {
-    "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Sql/servers/jhsqldbserver",
     "type": "Microsoft.Sql/servers",
     "kind": "v12.0",
     "name": "[parameters('serverName')]",
@@ -118,7 +114,6 @@
       "type": "firewallrules"
     }]
   }, {
-    "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Storage/storageAccounts/jhaccount",
     "type": "Microsoft.Storage/storageAccounts",
     "name": "[parameters('storageAccountsName')]",
     "apiVersion": "2015-06-15",
@@ -127,7 +122,6 @@
       "accountType": "Standard_RAGRS"
     }
   }, {
-    "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Web/serverFarms/jh-app-plan",
     "type": "Microsoft.Web/serverFarms",
     "sku": {
       "name": "S1",
@@ -145,7 +139,6 @@
       "numberOfWorkers": 1
     }
   }, {
-    "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Web/sites/jh-mobileApp",
     "type": "Microsoft.Web/sites",
     "kind": "mobileapp",
     "name": "[parameters('sitesName_mobile')]",
@@ -177,7 +170,6 @@
       "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
     ]
   }, {
-    "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Web/sites/jh-webApp",
     "type": "Microsoft.Web/sites",
     "name": "[parameters('sitesName_web')]",
     "apiVersion": "2015-08-01-preview",
