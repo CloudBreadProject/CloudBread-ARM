@@ -47,24 +47,6 @@
     "webScmSiteName": "[concat(variables('webName'),variables('urlScm'))]"
   },
   "resources": [{
-    "type": "Microsoft.Cache/Redis",
-    "name": "[parameters('redisName')]",
-    "apiVersion": "2015-08-01",
-    "location": "Japan West",
-    "properties": {
-      "sku": {
-        "name": "Standard",
-        "family": "C",
-        "capacity": 1
-      },
-      "enableNonSslPort": false,
-      "redisConfiguration": {
-        "maxclients": "1000",
-        "maxmemory-reserved": "50",
-        "maxmemory-delta": "50"
-      }
-    }
-  }, {
     "type": "Microsoft.NotificationHubs/namespaces",
     "name": "[parameters('notiNamespace')]",
     "apiVersion": "2014-09-01",
