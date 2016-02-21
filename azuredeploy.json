@@ -9,28 +9,41 @@
       "type": "string"
     },
     "serverName": {
-      "type": "string"
+      "type": "string",
+      "maxLength": 63
     },
     "databaseName": {
-      "type": "string"
+      "type": "string",
+      "maxLength": 128
     },
     "storageAccountsName": {
-      "type": "string"
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 24,
+      "metadata": {
+        "description": "Storage_account_name is only lowercase and number."
+      }
     },
     "planName": {
       "type": "string"
     },
     "sitesName_mobile": {
-      "type": "string"
+      "type": "string",
+      "minLength": 2
     },
     "sitesName_web": {
-      "type": "string"
+      "type": "string",
+      "minLength": 2
     },
     "administratorLogin": {
       "type": "string"
     },
     "administratorLoginPassword": {
-      "type": "securestring"
+      "type": "securestring",
+      "minLength": 8,
+      "metadata": {
+        "description": "Contain special characters."
+      }
     }
   },
   "variables": {
