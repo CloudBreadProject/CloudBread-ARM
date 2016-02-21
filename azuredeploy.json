@@ -1,0 +1,204 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "notiNamespace": {
+      "type": "string"
+    },
+    "notificationHubsName": {
+      "type": "string"
+    },
+    "serverName": {
+      "type": "string",
+      "maxLength": 63
+    },
+    "databaseName": {
+      "type": "string",
+      "maxLength": 128
+    },
+    "storageAccountsName": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 24,
+      "metadata": {
+        "description": "Storage_account_name is only lowercase and number."
+      }
+    },
+    "planName": {
+      "type": "string"
+    },
+    "sitesName_mobile": {
+      "type": "string",
+      "minLength": 2
+    },
+    "sitesName_web": {
+      "type": "string",
+      "minLength": 2
+    },
+    "administratorLogin": {
+      "type": "string"
+    },
+    "administratorLoginPassword": {
+      "type": "securestring",
+      "minLength": 8,
+      "metadata": {
+        "description": "Contain special characters."
+      }
+    }
+  },
+  "variables": {
+    "url": ".azurewebsites.net",
+    "urlScm": ".scm.azurewebsites.net",
+    "mobileName": "[parameters('sitesName_mobile')]",
+    "webName": "[parameters('sitesName_web')]",
+    "mobileSiteName": "[concat(variables('mobileName'),variables('url'))]",
+    "mobileScmSiteName": "[concat(variables('mobileName'),variables('urlScm'))]",
+    "webSiteName": "[concat(variables('webName'),variables('url'))]",
+    "webScmSiteName": "[concat(variables('webName'),variables('urlScm'))]"
+  },
+  "resources": [{
+    "type": "Microsoft.NotificationHubs/namespaces",
+    "name": "[parameters('notiNamespace')]",
+    "apiVersion": "2014-09-01",
+    "location": "Japan West",
+    "properties": {
+      "namespaceType": "NotificationHub"
+    },
+    "resources": [{
+      "type": "notificationHubs",
+      "name": "[parameters('notificationHubsName')]",
+      "apiVersion": "2014-09-01",
+      "location": "Japan West",
+      "properties": {
+        "authorizationRules": []
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.NotificationHubs/namespaces', parameters('notiNamespace'))]"
+      ]
+    }]
+  }, {
+    "type": "Microsoft.Sql/servers",
+    "kind": "v12.0",
+    "name": "[parameters('serverName')]",
+    "apiVersion": "2014-04-01-preview",
+    "location": "Japan West",
+    "properties": {
+      "administratorLogin": "[parameters('administratorLogin')]",
+      "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+      "version": "12.0"
+    },
+    "resources": [{
+      "name": "[parameters('databaseName')]",
+      "type": "databases",
+      "location": "Japan West",
+      "apiVersion": "2014-04-01-preview",
+      "dependsOn": [
+        "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
+      ],
+      "properties": {
+        "edition": "Standard",
+        "collation": "SQL_Latin1_General_CP1_CI_AS",
+        "maxSizeBytes": "268435456000",
+        "requestedServiceObjectiveName": "S0"
+      }
+    }, {
+      "apiVersion": "2014-04-01-preview",
+      "dependsOn": [
+        "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
+      ],
+      "location": "Japan West",
+      "name": "AllowAllWindowsAzureIps",
+      "properties": {
+        "endIpAddress": "0.0.0.0",
+        "startIpAddress": "0.0.0.0"
+      },
+      "type": "firewallrules"
+    }]
+  }, {
+    "type": "Microsoft.Storage/storageAccounts",
+    "name": "[parameters('storageAccountsName')]",
+    "apiVersion": "2015-06-15",
+    "location": "japanwest",
+    "properties": {
+      "accountType": "Standard_RAGRS"
+    }
+  }, {
+    "type": "Microsoft.Web/serverFarms",
+    "sku": {
+      "name": "S1",
+      "tier": "Standard",
+      "size": "S1",
+      "family": "S",
+      "capacity": 1
+    },
+    "kind": "",
+    "name": "[parameters('planName')]",
+    "apiVersion": "2015-08-01",
+    "location": "Japan West",
+    "properties": {
+      "name": "[parameters('planName')]",
+      "numberOfWorkers": 1
+    }
+  }, {
+    "type": "Microsoft.Web/sites",
+    "kind": "mobileapp",
+    "name": "[parameters('sitesName_mobile')]",
+    "apiVersion": "2015-08-01-preview",
+    "location": "Japan West",
+    "properties": {
+      "name": "[parameters('sitesName_mobile')]",
+      "hostNames": [
+        "[variables('mobileSiteName')]"
+      ],
+      "enabledHostNames": [
+        "[variables('mobileSiteName')]",
+        "[variables('mobileScmSiteName')]"
+      ],
+      "hostNameSslStates": [{
+        "name": "[variables('mobileSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }, {
+        "name": "[variables('mobileScmSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }],
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
+    },
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
+    ]
+  }, {
+    "type": "Microsoft.Web/sites",
+    "name": "[parameters('sitesName_web')]",
+    "apiVersion": "2015-08-01-preview",
+    "location": "Japan West",
+    "properties": {
+      "name": "[parameters('sitesName_web')]",
+      "hostNames": [
+        "[variables('webSiteName')]"
+      ],
+      "enabledHostNames": [
+        "[variables('webSiteName')]",
+        "[variables('webScmSiteName')]"
+      ],
+      "hostNameSslStates": [{
+        "name": "[variables('webSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }, {
+        "name": "[variables('webScmSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }],
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
+    },
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
+    ]
+  }]
+}
