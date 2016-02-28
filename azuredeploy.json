@@ -122,7 +122,7 @@
     }]
   }, {
     "type": "Microsoft.Storage/storageAccounts",
-    "name": "[parameters('storageAccountsName(Only lowercase and number. length:3~24)(Only lowercase and number. length:3~24)')]",
+    "name": "[parameters('storageAccountsName(Only lowercase and number. length:3~24)')]",
     "apiVersion": "2015-06-15",
     "location": "japanwest",
     "properties": {
