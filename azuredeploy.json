@@ -3,21 +3,26 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "notiNamespace(Only alphabet and number)": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "cloudbreadns"
     },
     "notificationHubsName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "cb-noti-"
     },
     "serverName": {
       "type": "string",
+      "defaultValue": "cb-server-",
       "maxLength": 63
     },
     "databaseName": {
       "type": "string",
+      "defaultValue": "cb-db-",
       "maxLength": 128
     },
     "storageAccountsName(Only lowercase and number. length:3~24)": {
       "type": "string",
+      "defaultValue": "cloudbreadacc",
       "minLength": 3,
       "maxLength": 24,
       "metadata": {
@@ -25,7 +30,8 @@
       }
     },
     "planName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "cb-plan-"
     },
     "sitesName_mobile(MobileApp name)": {
       "type": "string",
@@ -35,7 +41,7 @@
       "type": "string",
       "minLength": 2
     },
-    "administratorLogin": {
+    "administratorLogin(DB account id)": {
       "type": "string"
     },
     "administratorLoginPassword(Contain special characters. length: 8~)": {
@@ -83,8 +89,8 @@
     "apiVersion": "2014-04-01-preview",
     "location": "Japan West",
     "properties": {
-      "administratorLogin": "[parameters('administratorLogin')]",
-      "administratorLoginPassword(Contain special characters. length: 8~)": "[parameters('administratorLoginPassword(Contain special characters. length: 8~)')]",
+      "administratorLogin": "[parameters('administratorLogin(DB account id)')]",
+      "administratorLoginPassword": "[parameters('administratorLoginPassword(Contain special characters. length: 8~)')]",
       "version": "12.0"
     },
     "resources": [{
