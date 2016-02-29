@@ -2,6 +2,10 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+    "redisName": {
+      "type": "string",
+      "defaultValue": "cb-redis-"
+    },
     "notiNamespace(Only alphabet and number)": {
       "type": "string",
       "defaultValue": "cloudbreadns"
@@ -63,6 +67,25 @@
     "webScmSiteName": "[concat(variables('webName'),variables('urlScm'))]"
   },
   "resources": [{
+    "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Cache/Redis/jhredis",
+    "type": "Microsoft.Cache/Redis",
+    "name": "[parameters('redisName')]",
+    "apiVersion": "2015-08-01",
+    "location": "Japan West",
+    "properties": {
+      "sku": {
+        "name": "Standard",
+        "family": "C",
+        "capacity": 1
+      },
+      "enableNonSslPort": false,
+      "redisConfiguration": {
+        "maxclients": "1000",
+        "maxmemory-reserved": "50",
+        "maxmemory-delta": "50"
+      }
+    }
+  }, {
     "type": "Microsoft.NotificationHubs/namespaces",
     "name": "[parameters('notiNamespace(Only alphabet and number)')]",
     "apiVersion": "2014-09-01",
@@ -102,10 +125,11 @@
         "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
       ],
       "properties": {
-        "edition": "Standard",
+        "edition": "Basic",
         "collation": "SQL_Latin1_General_CP1_CI_AS",
-        "maxSizeBytes": "268435456000",
-        "requestedServiceObjectiveName": "S0"
+        "maxSizeBytes": "2147483648",
+        "requestedServiceObjectiveName": null,
+        "containmentState": 2
       }
     }, {
       "apiVersion": "2014-04-01-preview",
@@ -126,16 +150,16 @@
     "apiVersion": "2015-06-15",
     "location": "japanwest",
     "properties": {
-      "accountType": "Standard_RAGRS"
+      "accountType": "Standard_LRS"
     }
   }, {
     "type": "Microsoft.Web/serverFarms",
     "sku": {
-      "name": "S1",
-      "tier": "Standard",
-      "size": "S1",
-      "family": "S",
-      "capacity": 1
+      "name": "F1",
+      "tier": "Free",
+      "size": "F1",
+      "family": "F",
+      "capacity": 0
     },
     "kind": "",
     "name": "[parameters('planName')]",
