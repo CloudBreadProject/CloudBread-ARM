@@ -125,10 +125,11 @@
         "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
       ],
       "properties": {
-        "edition": "Standard",
+        "edition": "Basic",
         "collation": "SQL_Latin1_General_CP1_CI_AS",
-        "maxSizeBytes": "268435456000",
-        "requestedServiceObjectiveName": "S0"
+        "maxSizeBytes": "2147483648",
+        "requestedServiceObjectiveName": null,
+        "containmentState": 2
       }
     }, {
       "apiVersion": "2014-04-01-preview",
@@ -149,16 +150,16 @@
     "apiVersion": "2015-06-15",
     "location": "japanwest",
     "properties": {
-      "accountType": "Standard_RAGRS"
+      "accountType": "Standard_LRS"
     }
   }, {
     "type": "Microsoft.Web/serverFarms",
     "sku": {
-      "name": "S1",
-      "tier": "Standard",
-      "size": "S1",
-      "family": "S",
-      "capacity": 1
+      "name": "F1",
+      "tier": "Free",
+      "size": "F1",
+      "family": "F",
+      "capacity": 0
     },
     "kind": "",
     "name": "[parameters('planName')]",
