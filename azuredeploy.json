@@ -2,22 +2,27 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "notiNamespace": {
-      "type": "string"
+    "notiNamespace(Only alphabet and number)": {
+      "type": "string",
+      "defaultValue": "cloudbreadns"
     },
     "notificationHubsName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "cb-noti-"
     },
     "serverName": {
       "type": "string",
+      "defaultValue": "cb-server-",
       "maxLength": 63
     },
     "databaseName": {
       "type": "string",
+      "defaultValue": "cb-db-",
       "maxLength": 128
     },
-    "storageAccountsName": {
+    "storageAccountsName(Only lowercase and number. length:3~24)": {
       "type": "string",
+      "defaultValue": "cloudbreadacc",
       "minLength": 3,
       "maxLength": 24,
       "metadata": {
@@ -25,20 +30,21 @@
       }
     },
     "planName": {
-      "type": "string"
+      "type": "string",
+      "defaultValue": "cb-plan-"
     },
-    "sitesName_mobile": {
+    "sitesName_mobile(MobileApp name)": {
       "type": "string",
       "minLength": 2
     },
-    "sitesName_web": {
+    "sitesName_web(WebApp name)": {
       "type": "string",
       "minLength": 2
     },
-    "administratorLogin": {
+    "administratorLogin(DB account id)": {
       "type": "string"
     },
-    "administratorLoginPassword": {
+    "administratorLoginPassword(Contain special characters. length: 8~)": {
       "type": "securestring",
       "minLength": 8,
       "metadata": {
@@ -49,8 +55,8 @@
   "variables": {
     "url": ".azurewebsites.net",
     "urlScm": ".scm.azurewebsites.net",
-    "mobileName": "[parameters('sitesName_mobile')]",
-    "webName": "[parameters('sitesName_web')]",
+    "mobileName": "[parameters('sitesName_mobile(MobileApp name)')]",
+    "webName": "[parameters('sitesName_web(WebApp name)')]",
     "mobileSiteName": "[concat(variables('mobileName'),variables('url'))]",
     "mobileScmSiteName": "[concat(variables('mobileName'),variables('urlScm'))]",
     "webSiteName": "[concat(variables('webName'),variables('url'))]",
@@ -58,7 +64,7 @@
   },
   "resources": [{
     "type": "Microsoft.NotificationHubs/namespaces",
-    "name": "[parameters('notiNamespace')]",
+    "name": "[parameters('notiNamespace(Only alphabet and number)')]",
     "apiVersion": "2014-09-01",
     "location": "Japan West",
     "properties": {
@@ -73,7 +79,7 @@
         "authorizationRules": []
       },
       "dependsOn": [
-        "[resourceId('Microsoft.NotificationHubs/namespaces', parameters('notiNamespace'))]"
+        "[resourceId('Microsoft.NotificationHubs/namespaces', parameters('notiNamespace(Only alphabet and number)'))]"
       ]
     }]
   }, {
@@ -83,8 +89,8 @@
     "apiVersion": "2014-04-01-preview",
     "location": "Japan West",
     "properties": {
-      "administratorLogin": "[parameters('administratorLogin')]",
-      "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
+      "administratorLogin": "[parameters('administratorLogin(DB account id)')]",
+      "administratorLoginPassword": "[parameters('administratorLoginPassword(Contain special characters. length: 8~)')]",
       "version": "12.0"
     },
     "resources": [{
@@ -116,7 +122,7 @@
     }]
   }, {
     "type": "Microsoft.Storage/storageAccounts",
-    "name": "[parameters('storageAccountsName')]",
+    "name": "[parameters('storageAccountsName(Only lowercase and number. length:3~24)')]",
     "apiVersion": "2015-06-15",
     "location": "japanwest",
     "properties": {
@@ -142,11 +148,11 @@
   }, {
     "type": "Microsoft.Web/sites",
     "kind": "mobileapp",
-    "name": "[parameters('sitesName_mobile')]",
+    "name": "[parameters('sitesName_mobile(MobileApp name)')]",
     "apiVersion": "2015-08-01-preview",
     "location": "Japan West",
     "properties": {
-      "name": "[parameters('sitesName_mobile')]",
+      "name": "[parameters('sitesName_mobile(MobileApp name)')]",
       "hostNames": [
         "[variables('mobileSiteName')]"
       ],
@@ -172,11 +178,11 @@
     ]
   }, {
     "type": "Microsoft.Web/sites",
-    "name": "[parameters('sitesName_web')]",
+    "name": "[parameters('sitesName_web(WebApp name)')]",
     "apiVersion": "2015-08-01-preview",
     "location": "Japan West",
     "properties": {
-      "name": "[parameters('sitesName_web')]",
+      "name": "[parameters('sitesName_web(WebApp name)')]",
       "hostNames": [
         "[variables('webSiteName')]"
       ],
