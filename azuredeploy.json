@@ -71,7 +71,8 @@
 
     "basePlanName": "cb-plan-",
     "mobilePlanName": "[concat(variables('basePlanName'),variables('mobileName'))]",
-    "webPlanName": "[concat(variables('basePlanName'),variables('webName'))]"
+    "webPlanName": "[concat(variables('basePlanName'),variables('webName'))]",
+    "adminWebPlanName": "[concat(variables('basePlanName'),variables('adminWebName'))]"
   },
   "resources": [{
     "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Cache/Redis/jhredis",
@@ -186,6 +187,23 @@
       "capacity": 0
     },
     "kind": "",
+    "name": "[variables('adminWebPlanName')]",
+    "apiVersion": "2015-08-01",
+    "location": "Japan West",
+    "properties": {
+      "name": "[variables('adminWebPlanName')]",
+      "numberOfWorkers": 1
+    }
+  }, {
+    "type": "Microsoft.Web/serverFarms",
+    "sku": {
+      "name": "F1",
+      "tier": "Free",
+      "size": "F1",
+      "family": "F",
+      "capacity": 0
+    },
+    "kind": "",
     "name": "[variables('mobilePlanName')]",
     "apiVersion": "2015-08-01",
     "location": "Japan West",
@@ -279,10 +297,10 @@
         "thumbprint": null,
         "ipBasedSslState": 0
       }],
-      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('webPlanName'))]"
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('adminWebPlanName'))]"
     },
     "dependsOn": [
-      "[resourceId('Microsoft.Web/serverFarms', variables('webPlanName'))]"
+      "[resourceId('Microsoft.Web/serverFarms', variables('adminWebPlanName'))]"
     ]
   }]
 }
