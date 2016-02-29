@@ -37,6 +37,10 @@
       "type": "string",
       "minLength": 2
     },
+    "sitesName_adminweb(AdminWebApp name)": {
+      "type": "string",
+      "minLength": 2
+    },
     "sitesName_web(WebApp name)": {
       "type": "string",
       "minLength": 2
@@ -57,13 +61,16 @@
     "urlScm": ".scm.azurewebsites.net",
     "mobileName": "[parameters('sitesName_mobile(MobileApp name)')]",
     "webName": "[parameters('sitesName_web(WebApp name)')]",
+    "adminWebName": "[parameters('sitesName_adminweb(AdminWebApp name)')]",
     "mobileSiteName": "[concat(variables('mobileName'),variables('url'))]",
     "mobileScmSiteName": "[concat(variables('mobileName'),variables('urlScm'))]",
     "webSiteName": "[concat(variables('webName'),variables('url'))]",
     "webScmSiteName": "[concat(variables('webName'),variables('urlScm'))]",
+    "adminWebSiteName": "[concat(variables('adminWebName'),variables('url'))]",
+    "adminWebScmSiteName": "[concat(variables('adminWebName'),variables('urlScm'))]",
 
     "basePlanName": "cb-plan-",
-    "mobilePlanName": "concat(variables('basePlanName'),variables('mobileName'))]",
+    "mobilePlanName": "[concat(variables('basePlanName'),variables('mobileName'))]",
     "webPlanName": "[concat(variables('basePlanName'),variables('webName'))]"
   },
   "resources": [{
@@ -238,6 +245,36 @@
         "ipBasedSslState": 0
       }, {
         "name": "[variables('webScmSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }],
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('webPlanName'))]"
+    },
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/serverFarms', variables('webPlanName'))]"
+    ]
+  }, {
+    "type": "Microsoft.Web/sites",
+    "name": "[parameters('sitesName_adminweb(AdminWebApp name)')]",
+    "apiVersion": "2015-08-01-preview",
+    "location": "Japan West",
+    "properties": {
+      "name": "[parameters('sitesName_adminweb(AdminWebApp name)')]",
+      "hostNames": [
+        "[variables('adminWebSiteName')]"
+      ],
+      "enabledHostNames": [
+        "[variables('adminWebSiteName')]",
+        "[variables('adminWebScmSiteName')]"
+      ],
+      "hostNameSslStates": [{
+        "name": "[variables('adminWebSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }, {
+        "name": "[variables('adminWebScmSiteName')]",
         "sslState": 0,
         "thumbprint": null,
         "ipBasedSslState": 0
