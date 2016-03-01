@@ -33,11 +33,11 @@
         "description": "Storage_account_name is only lowercase and number."
       }
     },
-    "planName": {
-      "type": "string",
-      "defaultValue": "cb-plan-"
-    },
     "sitesName_mobile(MobileApp name)": {
+      "type": "string",
+      "minLength": 2
+    },
+    "sitesName_adminweb(AdminWebApp name)": {
       "type": "string",
       "minLength": 2
     },
@@ -61,10 +61,18 @@
     "urlScm": ".scm.azurewebsites.net",
     "mobileName": "[parameters('sitesName_mobile(MobileApp name)')]",
     "webName": "[parameters('sitesName_web(WebApp name)')]",
+    "adminWebName": "[parameters('sitesName_adminweb(AdminWebApp name)')]",
     "mobileSiteName": "[concat(variables('mobileName'),variables('url'))]",
     "mobileScmSiteName": "[concat(variables('mobileName'),variables('urlScm'))]",
     "webSiteName": "[concat(variables('webName'),variables('url'))]",
-    "webScmSiteName": "[concat(variables('webName'),variables('urlScm'))]"
+    "webScmSiteName": "[concat(variables('webName'),variables('urlScm'))]",
+    "adminWebSiteName": "[concat(variables('adminWebName'),variables('url'))]",
+    "adminWebScmSiteName": "[concat(variables('adminWebName'),variables('urlScm'))]",
+
+    "basePlanName": "cb-plan-",
+    "mobilePlanName": "[concat(variables('basePlanName'),variables('mobileName'))]",
+    "webPlanName": "[concat(variables('basePlanName'),variables('webName'))]",
+    "adminWebPlanName": "[concat(variables('basePlanName'),variables('adminWebName'))]"
   },
   "resources": [{
     "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Cache/Redis/jhredis",
@@ -162,11 +170,45 @@
       "capacity": 0
     },
     "kind": "",
-    "name": "[parameters('planName')]",
+    "name": "[variables('webPlanName')]",
     "apiVersion": "2015-08-01",
     "location": "Japan West",
     "properties": {
-      "name": "[parameters('planName')]",
+      "name": "[variables('webPlanName')]",
+      "numberOfWorkers": 1
+    }
+  }, {
+    "type": "Microsoft.Web/serverFarms",
+    "sku": {
+      "name": "F1",
+      "tier": "Free",
+      "size": "F1",
+      "family": "F",
+      "capacity": 0
+    },
+    "kind": "",
+    "name": "[variables('adminWebPlanName')]",
+    "apiVersion": "2015-08-01",
+    "location": "Japan West",
+    "properties": {
+      "name": "[variables('adminWebPlanName')]",
+      "numberOfWorkers": 1
+    }
+  }, {
+    "type": "Microsoft.Web/serverFarms",
+    "sku": {
+      "name": "F1",
+      "tier": "Free",
+      "size": "F1",
+      "family": "F",
+      "capacity": 0
+    },
+    "kind": "",
+    "name": "[variables('mobilePlanName')]",
+    "apiVersion": "2015-08-01",
+    "location": "Japan West",
+    "properties": {
+      "name": "[variables('mobilePlanName')]",
       "numberOfWorkers": 1
     }
   }, {
@@ -195,10 +237,10 @@
         "thumbprint": null,
         "ipBasedSslState": 0
       }],
-      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('mobilePlanName'))]"
     },
     "dependsOn": [
-      "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
+      "[resourceId('Microsoft.Web/serverFarms', variables('mobilePlanName'))]"
     ]
   }, {
     "type": "Microsoft.Web/sites",
@@ -225,10 +267,40 @@
         "thumbprint": null,
         "ipBasedSslState": 0
       }],
-      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('webPlanName'))]"
     },
     "dependsOn": [
-      "[resourceId('Microsoft.Web/serverFarms', parameters('planName'))]"
+      "[resourceId('Microsoft.Web/serverFarms', variables('webPlanName'))]"
+    ]
+  }, {
+    "type": "Microsoft.Web/sites",
+    "name": "[parameters('sitesName_adminweb(AdminWebApp name)')]",
+    "apiVersion": "2015-08-01-preview",
+    "location": "Japan West",
+    "properties": {
+      "name": "[parameters('sitesName_adminweb(AdminWebApp name)')]",
+      "hostNames": [
+        "[variables('adminWebSiteName')]"
+      ],
+      "enabledHostNames": [
+        "[variables('adminWebSiteName')]",
+        "[variables('adminWebScmSiteName')]"
+      ],
+      "hostNameSslStates": [{
+        "name": "[variables('adminWebSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }, {
+        "name": "[variables('adminWebScmSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }],
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('adminWebPlanName'))]"
+    },
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/serverFarms', variables('adminWebPlanName'))]"
     ]
   }]
 }
