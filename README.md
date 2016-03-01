@@ -20,12 +20,41 @@ Site Name_adminweb|admin web page name.
 Site Name_web|web page name.
 
 ### Direction
-1. Click the [Deploy to Azure] button.
+1.Click the [Deploy to Azure] button.
 
-2. Fill in the blanks about parameter
+2.Fill in the blanks about parameter. and Click the [Next>] button
 
-3. Click the [Next>] button
+![](./cb-arm-direction/deployment/cb-arm-deploy01.png)
 
-4. Wait for checking the parameters about error, and Click the [Deploy>] button.
+3.Wait for checking the parameters about error, and Click the [Deploy>] button.
+
+![](./cb-arm-direction/deployment/cb-arm-deploy02.png)
+
+4.Wait a minute, and then deployment was completed!
  
-5. Wait a minute, and then deployment was completed!
+![](./cb-arm-direction/deployment/cb-arm-deploy03.png)
+
+
+#### And then, follow the Continuous Deployment with automation
+1.Enter the Azure cloud portal site.
+
+2.In the resource group, find the MobileApp and click it.
+
+![](./cb-arm-direction/automationCD/arm-auto01.png)
+
+3.In the MobileApp, click setting and find Continuous deployment.
+
+![](./cb-arm-direction/automationCD/arm-auto02.png)
+
+4.Choose source what you want.
+
+![](./cb-arm-direction/automationCD/arm-auto03.png)
+
+5.If you select GitHub, you will have to exist the repository.
+  select the all of things, and click the [OK] button.
+
+![](./cb-arm-direction/automationCD/arm-auto04.png)
+
+6.Now, Continuous deployment success!
+
+![](./cb-arm-direction/automationCD/arm-auto05.png)
