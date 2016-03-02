@@ -2,48 +2,19 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "redisName": {
+    "postfixAppName": {
       "type": "string",
-      "defaultValue": "cb-redis-"
+      "maxLength": 14
     },
-    "notiNamespace": {
+    "appLocation": {
       "type": "string",
-      "defaultValue": "cloudbreadns"
-    },
-    "notificationHubsName": {
-      "type": "string",
-      "defaultValue": "cb-noti-"
-    },
-    "serverName": {
-      "type": "string",
-      "defaultValue": "cb-server-",
-      "maxLength": 63
-    },
-    "databaseName": {
-      "type": "string",
-      "defaultValue": "cb-db-",
-      "maxLength": 128
-    },
-    "storageAccountsName": {
-      "type": "string",
-      "defaultValue": "cloudbreadacc",
-      "minLength": 3,
-      "maxLength": 24,
-      "metadata": {
-        "description": "Storage_account_name is only lowercase and number."
-      }
-    },
-    "sitesName_mobile": {
-      "type": "string",
-      "minLength": 2
-    },
-    "sitesName_adminweb": {
-      "type": "string",
-      "minLength": 2
-    },
-    "sitesName_web": {
-      "type": "string",
-      "minLength": 2
+      "defaultValue": "Japan West",
+      "allowedValues": [
+        "Japan West",
+        "Japan East",
+        "East Asia",
+        "Southeast Asia"
+      ]
     },
     "administratorLogin": {
       "type": "string"
@@ -52,34 +23,43 @@
       "type": "securestring",
       "minLength": 8,
       "metadata": {
-        "description": "Contain special characters."
+        "description": "Contain special characters. length : 8~"
       }
     }
   },
   "variables": {
+    "postfixName": "[parameters('postfixAppName')]",
+    "redisName": "-cb-redis-dev-jp",
+    "sqlServerName": "-cb-sqlsvr-dev-jp",
+    "sqlDBName": "-cb-sqldb-dev-jp",
+    "storAccName": "cbstrdevjp",
+    "fePlanName": "-cb-fe-asp-dev-jp",
+    "socketPlanName": "-cb-socket-asp-dev-jp",
+    "adminWebPlanName": "-cb-adminweb-asp-dev-jp",
+    "mobileAppName": "-cb-fe-ma-dev-jp",
+    "socketAppName": "-cb-socket-wa-dev-jp",
+    "adminWebAppName": "-cb-adminweb-wa-dev-jp",
+    "notificationHubName": "-cb-push-nh-dev-jp",
+    "notiNamespace": "cbpushnndevjp",
+
     "url": ".azurewebsites.net",
     "urlScm": ".scm.azurewebsites.net",
-    "mobileName": "[parameters('sitesName_mobile')]",
-    "webName": "[parameters('sitesName_web')]",
-    "adminWebName": "[parameters('sitesName_adminweb')]",
+    "mobileName": "[concat(variables('postfix'),variables('mobileAppName'))]",
+    "socketName": "[concat(variables('postfix'),variables('socketAppName'))]",
+    "adminWebName": "[concat(variables('postfix'),variables('adminWebAppName'))]",
     "mobileSiteName": "[concat(variables('mobileName'),variables('url'))]",
     "mobileScmSiteName": "[concat(variables('mobileName'),variables('urlScm'))]",
-    "webSiteName": "[concat(variables('webName'),variables('url'))]",
-    "webScmSiteName": "[concat(variables('webName'),variables('urlScm'))]",
+    "socketSiteName": "[concat(variables('socketName'),variables('url'))]",
+    "socketScmSiteName": "[concat(variables('socketName'),variables('urlScm'))]",
     "adminWebSiteName": "[concat(variables('adminWebName'),variables('url'))]",
-    "adminWebScmSiteName": "[concat(variables('adminWebName'),variables('urlScm'))]",
-
-    "basePlanName": "cb-plan-",
-    "mobilePlanName": "[concat(variables('basePlanName'),variables('mobileName'))]",
-    "webPlanName": "[concat(variables('basePlanName'),variables('webName'))]",
-    "adminWebPlanName": "[concat(variables('basePlanName'),variables('adminWebName'))]"
+    "adminWebScmSiteName": "[concat(variables('adminWebName'),variables('urlScm'))]"
   },
   "resources": [{
     "comments": "Generalized from resource: /subscriptions/3e6494d9-d19d-41c6-bfa6-44870aecc57b/resourceGroups/jh-rg-cloudbread/providers/Microsoft.Cache/Redis/jhredis",
     "type": "Microsoft.Cache/Redis",
-    "name": "[parameters('redisName')]",
+    "name": "[concat(variables('postfix'),variables('redisName'))]",
     "apiVersion": "2015-08-01",
-    "location": "Japan West",
+    "location": "[parameters('appLocation')]",
     "properties": {
       "sku": {
         "name": "Standard",
@@ -95,42 +75,42 @@
     }
   }, {
     "type": "Microsoft.NotificationHubs/namespaces",
-    "name": "[parameters('notiNamespace')]",
+    "name": "[concat(variables('postfix'),variables('notiNamespace'))]",
     "apiVersion": "2014-09-01",
-    "location": "Japan West",
+    "location": "[parameters('appLocation')]",
     "properties": {
       "namespaceType": "NotificationHub"
     },
     "resources": [{
       "type": "notificationHubs",
-      "name": "[parameters('notificationHubsName')]",
+      "name": "[concat(variables('postfix'),variables('notificationHubName'))]",
       "apiVersion": "2014-09-01",
-      "location": "Japan West",
+      "location": "[parameters('appLocation')]",
       "properties": {
         "authorizationRules": []
       },
       "dependsOn": [
-        "[resourceId('Microsoft.NotificationHubs/namespaces', parameters('notiNamespace'))]"
+        "[resourceId('Microsoft.NotificationHubs/namespaces', concat(variables('postfix'),variables('notiNamespace')))]"
       ]
     }]
   }, {
     "type": "Microsoft.Sql/servers",
     "kind": "v12.0",
-    "name": "[parameters('serverName')]",
+    "name": "[concat(variables('postfix'),variables('sqlServerName'))]",
     "apiVersion": "2014-04-01-preview",
-    "location": "Japan West",
+    "location": "[parameters('appLocation')]",
     "properties": {
       "administratorLogin": "[parameters('administratorLogin')]",
       "administratorLoginPassword": "[parameters('administratorLoginPassword')]",
       "version": "12.0"
     },
     "resources": [{
-      "name": "[parameters('databaseName')]",
+      "name": "[concat(variables('postfix'),variables('sqlDBName'))]",
       "type": "databases",
-      "location": "Japan West",
+      "location": "[parameters('appLocation')]",
       "apiVersion": "2014-04-01-preview",
       "dependsOn": [
-        "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
+        "[concat('Microsoft.Sql/servers/', concat(variables('postfix'),variables('sqlServerName')))]"
       ],
       "properties": {
         "edition": "Basic",
@@ -142,9 +122,9 @@
     }, {
       "apiVersion": "2014-04-01-preview",
       "dependsOn": [
-        "[concat('Microsoft.Sql/servers/', parameters('serverName'))]"
+        "[concat('Microsoft.Sql/servers/', concat(variables('postfix'),variables('sqlServerName')))]"
       ],
-      "location": "Japan West",
+      "location": "[parameters('appLocation')]",
       "name": "AllowAllWindowsAzureIps",
       "properties": {
         "endIpAddress": "0.0.0.0",
@@ -154,9 +134,9 @@
     }]
   }, {
     "type": "Microsoft.Storage/storageAccounts",
-    "name": "[parameters('storageAccountsName')]",
+    "name": "[concat(variables('postfix'),variables('storAccName'))]",
     "apiVersion": "2015-06-15",
-    "location": "japanwest",
+    "location": "[parameters('appLocation')]",
     "properties": {
       "accountType": "Standard_LRS"
     }
@@ -170,11 +150,11 @@
       "capacity": 0
     },
     "kind": "",
-    "name": "[variables('webPlanName')]",
+    "name": "[concat(variables('postfixName'),variables('socketPlanName'))]",
     "apiVersion": "2015-08-01",
-    "location": "Japan West",
+    "location": "[parameters('appLocation')]",
     "properties": {
-      "name": "[variables('webPlanName')]",
+      "name": "[concat(variables('postfixName'),variables('socketPlanName'))]",
       "numberOfWorkers": 1
     }
   }, {
@@ -187,11 +167,11 @@
       "capacity": 0
     },
     "kind": "",
-    "name": "[variables('adminWebPlanName')]",
+    "name": "[concat(variables('postfixName'),variables('adminWebPlanName'))]",
     "apiVersion": "2015-08-01",
-    "location": "Japan West",
+    "location": "[parameters('appLocation')]",
     "properties": {
-      "name": "[variables('adminWebPlanName')]",
+      "name": "[concat(variables('postfixName'),variables('adminWebPlanName'))]",
       "numberOfWorkers": 1
     }
   }, {
@@ -204,21 +184,21 @@
       "capacity": 0
     },
     "kind": "",
-    "name": "[variables('mobilePlanName')]",
+    "name": "[concat(variables('postfixName'),variables('fePlanName'))]",
     "apiVersion": "2015-08-01",
-    "location": "Japan West",
+    "location": "[parameters('appLocation')]",
     "properties": {
-      "name": "[variables('mobilePlanName')]",
+      "name": "[concat(variables('postfixName'),variables('fePlanName'))]",
       "numberOfWorkers": 1
     }
   }, {
     "type": "Microsoft.Web/sites",
     "kind": "mobileapp",
-    "name": "[parameters('sitesName_mobile')]",
+    "name": "[variables('mobileName')]",
     "apiVersion": "2015-08-01-preview",
-    "location": "Japan West",
+    "location": "[parameters('appLocation')]",
     "properties": {
-      "name": "[parameters('sitesName_mobile')]",
+      "name": "[variables('mobileName')]",
       "hostNames": [
         "[variables('mobileSiteName')]"
       ],
@@ -237,48 +217,48 @@
         "thumbprint": null,
         "ipBasedSslState": 0
       }],
-      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('mobilePlanName'))]"
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('fePlanName')))]"
     },
     "dependsOn": [
-      "[resourceId('Microsoft.Web/serverFarms', variables('mobilePlanName'))]"
+      "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('fePlanName')))]"
     ]
   }, {
     "type": "Microsoft.Web/sites",
-    "name": "[parameters('sitesName_web')]",
+    "name": "[variables('socketName')]",
     "apiVersion": "2015-08-01-preview",
-    "location": "Japan West",
+    "location": "[parameters('appLocation')]",
     "properties": {
-      "name": "[parameters('sitesName_web')]",
+      "name": "[variables('socketName')]",
       "hostNames": [
-        "[variables('webSiteName')]"
+        "[variables('socketSiteName')]"
       ],
       "enabledHostNames": [
-        "[variables('webSiteName')]",
-        "[variables('webScmSiteName')]"
+        "[variables('socketSiteName')]",
+        "[variables('socketScmSiteName')]"
       ],
       "hostNameSslStates": [{
-        "name": "[variables('webSiteName')]",
+        "name": "[variables('socketSiteName')]",
         "sslState": 0,
         "thumbprint": null,
         "ipBasedSslState": 0
       }, {
-        "name": "[variables('webScmSiteName')]",
+        "name": "[variables('socketScmSiteName')]",
         "sslState": 0,
         "thumbprint": null,
         "ipBasedSslState": 0
       }],
-      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('webPlanName'))]"
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('socketPlanName')))]"
     },
     "dependsOn": [
-      "[resourceId('Microsoft.Web/serverFarms', variables('webPlanName'))]"
+      "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('socketPlanName')))]"
     ]
   }, {
     "type": "Microsoft.Web/sites",
-    "name": "[parameters('sitesName_adminweb')]",
+    "name": "[variables('adminWebName')]",
     "apiVersion": "2015-08-01-preview",
-    "location": "Japan West",
+    "location": "[parameters('appLocation')]",
     "properties": {
-      "name": "[parameters('sitesName_adminweb')]",
+      "name": "[variables('adminWebName')]",
       "hostNames": [
         "[variables('adminWebSiteName')]"
       ],
@@ -297,10 +277,10 @@
         "thumbprint": null,
         "ipBasedSslState": 0
       }],
-      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', variables('adminWebPlanName'))]"
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('adminWebPlanName')))]"
     },
     "dependsOn": [
-      "[resourceId('Microsoft.Web/serverFarms', variables('adminWebPlanName'))]"
+      "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('adminWebPlanName')))]"
     ]
   }]
 }
