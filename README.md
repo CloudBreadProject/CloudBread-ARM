@@ -8,6 +8,7 @@ CloudBread-ARM project is using Microsoft Azure Resource Manager for automatic s
 ### Input Parameters info
 Resource naming comvention
  * properName-CloudBread-Role-ResourceType-stagingStatus-dataCenterLocation
+
  ex) redis name: jhapp-cb-redis-dev-jp
 
 Resource|Detail
@@ -18,7 +19,7 @@ Noti Namespace|Namespace of notification hubs.
 Notification Hubs|Notitfication hub for the push alarm.
 Server Name|Sql server for application.
 Database Name|Azure Relational database.
-Storage Accounts Name|Key:Value type Database for saving game log.
+Storage Accounts Name|[Key : Value] type Database for saving game log.
 Mobile App|mobile app.
 Admin Web App|admin web page.
 Web App(Socket)|socket page.
