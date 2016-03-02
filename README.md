@@ -15,7 +15,7 @@ Noti Namespace|Namespace of notification hubs.
 Notification Hubs Name|Notitfication hubs name for the push alarm.
 Server Name|Sql server name for application.
 Database Name|Azure Relational database.
-Storage Accounts Name|Cheap database for saving game log.
+Storage Accounts Name|Database for saving game log.
 Site Name_mobile|mobile app name.
 Site Name_adminweb|admin web page name.
 Site Name_web|web page name.
