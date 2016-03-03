@@ -6,7 +6,7 @@
       "type": "string",
       "maxLength": 16,
       "metadata": {
-        "description": "Only alphabet and number."
+        "description": "Only alphabet and number. length: ~16"
       }
     },
     "Location": {
@@ -20,13 +20,16 @@
       ]
     },
     "SQL server Login ID": {
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description": "Do not use the 'admin' for ID."
+      }
     },
     "SQL server Login password": {
       "type": "securestring",
       "minLength": 8,
       "metadata": {
-        "description": "Contain special characters. length : 8~"
+        "description": "Contain special characters. length: 8~"
       }
     }
   },
