@@ -4,7 +4,10 @@
   "parameters": {
     "postfixAppName": {
       "type": "string",
-      "maxLength": 14
+      "maxLength": 16,
+      "metadata": {
+        "description": "Only alphabet and number."
+      }
     },
     "appLocation": {
       "type": "string",
@@ -29,18 +32,18 @@
   },
   "variables": {
     "postfixName": "[parameters('postfixAppName')]",
-    "redisName": "-cb-redis-dev-jp",
-    "sqlServerName": "-cb-sqlsvr-dev-jp",
-    "sqlDBName": "-cb-sqldb-dev-jp",
-    "storAccName": "cbstrdevjp",
-    "fePlanName": "-cb-fe-asp-dev-jp",
-    "socketPlanName": "-cb-socket-asp-dev-jp",
-    "adminWebPlanName": "-cb-adminweb-asp-dev-jp",
-    "mobileAppName": "-cb-fe-ma-dev-jp",
-    "socketAppName": "-cb-socket-wa-dev-jp",
-    "adminWebAppName": "-cb-adminweb-wa-dev-jp",
-    "notificationHubName": "-cb-push-nh-dev-jp",
-    "notiNamespace": "cbpushnndevjp",
+    "redisName": "-cb-redis-dev",
+    "sqlServerName": "-cb-sqlsvr-dev",
+    "sqlDBName": "-cb-sqldb-dev",
+    "storAccName": "cbstrdev",
+    "fePlanName": "-cb-fe-asp-dev",
+    "socketPlanName": "-cb-socket-asp-dev",
+    "adminWebPlanName": "-cb-adminweb-asp-dev",
+    "mobileAppName": "-cb-fe-ma-dev",
+    "socketAppName": "-cb-socket-wa-dev",
+    "adminWebAppName": "-cb-adminweb-wa-dev",
+    "notificationHubName": "-cb-push-nh-dev",
+    "notiNamespace": "cbpushnndev",
 
     "url": ".azurewebsites.net",
     "urlScm": ".scm.azurewebsites.net",
