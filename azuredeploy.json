@@ -19,13 +19,13 @@
         "Southeast Asia"
       ]
     },
-    "SQL server Login ID": {
+    "SQLserverLoginID": {
       "type": "string",
       "metadata": {
         "description": "Do not use the 'admin' for ID."
       }
     },
-    "SQL server Login password": {
+    "SQLserverLoginpassword": {
       "type": "securestring",
       "minLength": 8,
       "metadata": {
@@ -106,8 +106,8 @@
     "apiVersion": "2014-04-01-preview",
     "location": "[parameters('Location')]",
     "properties": {
-      "SQL server Login ID": "[parameters('SQL server Login ID')]",
-      "SQL server Login password": "[parameters('SQL server Login password')]",
+      "SQLserverLoginID": "[parameters('SQLserverLoginID')]",
+      "SQLserverLoginpassword": "[parameters('SQLserverLoginpassword')]",
       "version": "12.0"
     },
     "resources": [{
