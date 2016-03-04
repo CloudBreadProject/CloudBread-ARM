@@ -147,57 +147,36 @@
       "accountType": "Standard_LRS"
     }
   }, {
-    "type": "Microsoft.Web/serverFarms",
-    "sku": {
-      "name": "F1",
-      "tier": "Free",
-      "size": "F1",
-      "family": "F",
-      "capacity": 0
-    },
-    "kind": "",
-    "name": "[concat(variables('postfixName'),variables('socketPlanName'))]",
-    "apiVersion": "2015-08-01",
-    "location": "[parameters('Location')]",
-    "properties": {
-      "name": "[concat(variables('postfixName'),variables('socketPlanName'))]",
-      "numberOfWorkers": 1
-    }
-  }, {
-    "type": "Microsoft.Web/serverFarms",
-    "sku": {
-      "name": "F1",
-      "tier": "Free",
-      "size": "F1",
-      "family": "F",
-      "capacity": 0
-    },
-    "kind": "",
-    "name": "[concat(variables('postfixName'),variables('adminWebPlanName'))]",
-    "apiVersion": "2015-08-01",
-    "location": "[parameters('Location')]",
-    "properties": {
-      "name": "[concat(variables('postfixName'),variables('adminWebPlanName'))]",
-      "numberOfWorkers": 1
-    }
-  }, {
-    "type": "Microsoft.Web/serverFarms",
-    "sku": {
-      "name": "F1",
-      "tier": "Free",
-      "size": "F1",
-      "family": "F",
-      "capacity": 0
-    },
-    "kind": "",
-    "name": "[concat(variables('postfixName'),variables('fePlanName'))]",
-    "apiVersion": "2015-08-01",
-    "location": "[parameters('Location')]",
-    "properties": {
-      "name": "[concat(variables('postfixName'),variables('fePlanName'))]",
-      "numberOfWorkers": 1
-    }
-  }, {
+   "type": "Microsoft.Web/serverfarms",
+   "apiVersion": "2015-08-01",
+   "name": "[concat(variables('postfixName'),variables('socketPlanName'))]",
+   "location": "[parameters('Location')]",
+   "sku": {
+     "name": "F1",
+     "tier": "Free",
+     "capacity": 1
+   }
+ }, {
+  "type": "Microsoft.Web/serverfarms",
+  "apiVersion": "2015-08-01",
+  "name": "[concat(variables('postfixName'),variables('adminWebPlanName'))]",
+  "location": "[parameters('Location')]",
+  "sku": {
+    "name": "F1",
+    "tier": "Free",
+    "capacity": 1
+  }
+}, {
+ "type": "Microsoft.Web/serverfarms",
+ "apiVersion": "2015-08-01",
+ "name": "[concat(variables('postfixName'),variables('fePlanName'))]",
+ "location": "[parameters('Location')]",
+ "sku": {
+   "name": "F1",
+   "tier": "Free",
+   "capacity": 1
+ }
+}, {
     "type": "Microsoft.Web/sites",
     "kind": "mobileapp",
     "name": "[variables('mobileName')]",
