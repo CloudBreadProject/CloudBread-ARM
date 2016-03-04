@@ -147,23 +147,6 @@
       "accountType": "Standard_LRS"
     }
   }, {
-    "type": "Microsoft.Web/serverFarms",
-    "sku": {
-      "name": "F1",
-      "tier": "Free",
-      "size": "F1",
-      "family": "F",
-      "capacity": 0
-    },
-    "kind": "",
-    "name": "[concat(variables('postfixName'),variables('socketPlanName'))]",
-    "apiVersion": "2015-08-01",
-    "location": "[parameters('Location')]",
-    "properties": {
-      "name": "[concat(variables('postfixName'),variables('socketPlanName'))]",
-      "numberOfWorkers": 1
-    }
-  }, {
     "apiVersion": "2015-04-01",
     "name": "[concat(variables('postfixName'),variables('socketPlanName'))]",
     "type": "Microsoft.Web/serverfarms",
