@@ -3,11 +3,11 @@ This porject is automatic provision script for CloudBread service instances on C
 
 CloudBread-ARM project is using Microsoft Azure Resource Manager for automatic service deployment.  
 1. Mobile App deployment  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2mobiledeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fmobiledeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
 2. Admin web page deployment  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2admindeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fadmindeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
 3. Others(Socket, Database, Noti) deployment  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2othersdeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fothersdeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
 
 ### Resources info
 Resource naming comvention
