@@ -1,0 +1,76 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "postfixAppName": {
+      "type": "string",
+      "maxLength": 16,
+      "metadata": {
+        "description": "Only alphabet and number. length: ~16"
+      }
+    },
+    "Location": {
+      "type": "string",
+      "defaultValue": "Japan West",
+      "allowedValues": [
+        "Japan West",
+        "Japan East",
+        "East Asia",
+        "Southeast Asia"
+      ]
+    }
+  },
+  "variables": {
+    "postfixName": "[parameters('postfixAppName')]",
+    "fePlanName": "-cb-fe-asp-dev",
+    "mobileAppName": "-cb-fe-ma-dev",
+
+    "url": ".azurewebsites.net",
+    "urlScm": ".scm.azurewebsites.net",
+    "mobileName": "[concat(variables('postfixName'),variables('mobileAppName'))]",
+    "mobileSiteName": "[concat(variables('mobileName'),variables('url'))]",
+    "mobileScmSiteName": "[concat(variables('mobileName'),variables('urlScm'))]"
+  },
+  "resources": [{
+ "type": "Microsoft.Web/serverfarms",
+ "apiVersion": "2015-08-01",
+ "name": "[concat(variables('postfixName'),variables('fePlanName'))]",
+ "location": "[parameters('Location')]",
+ "sku": {
+   "name": "F1",
+   "tier": "Free",
+   "capacity": 1
+ }
+}, {
+    "type": "Microsoft.Web/sites",
+    "kind": "mobileapp",
+    "name": "[variables('mobileName')]",
+    "apiVersion": "2015-08-01-preview",
+    "location": "[parameters('Location')]",
+    "properties": {
+      "name": "[variables('mobileName')]",
+      "hostNames": [
+        "[variables('mobileSiteName')]"
+      ],
+      "enabledHostNames": [
+        "[variables('mobileSiteName')]",
+        "[variables('mobileScmSiteName')]"
+      ],
+      "hostNameSslStates": [{
+        "name": "[variables('mobileSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }, {
+        "name": "[variables('mobileScmSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }],
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('fePlanName')))]"
+    },
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('fePlanName')))]"
+    ]
+  }]
+}

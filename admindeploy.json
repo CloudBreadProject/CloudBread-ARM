@@ -1,0 +1,75 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "postfixAppName": {
+      "type": "string",
+      "maxLength": 16,
+      "metadata": {
+        "description": "Only alphabet and number. length: ~16"
+      }
+    },
+    "Location": {
+      "type": "string",
+      "defaultValue": "Japan West",
+      "allowedValues": [
+        "Japan West",
+        "Japan East",
+        "East Asia",
+        "Southeast Asia"
+      ]
+    }
+  },
+  "variables": {
+    "postfixName": "[parameters('postfixAppName')]",
+    "adminWebPlanName": "-cb-adminweb-asp-dev",
+    "adminWebAppName": "-cb-adminweb-wa-dev",
+
+    "url": ".azurewebsites.net",
+    "urlScm": ".scm.azurewebsites.net",
+    "adminWebName": "[concat(variables('postfixName'),variables('adminWebAppName'))]",
+    "adminWebSiteName": "[concat(variables('adminWebName'),variables('url'))]",
+    "adminWebScmSiteName": "[concat(variables('adminWebName'),variables('urlScm'))]"
+  },
+  "resources": [{
+  "type": "Microsoft.Web/serverfarms",
+  "apiVersion": "2015-08-01",
+  "name": "[concat(variables('postfixName'),variables('adminWebPlanName'))]",
+  "location": "[parameters('Location')]",
+  "sku": {
+    "name": "F1",
+    "tier": "Free",
+    "capacity": 1
+  }
+}, {
+    "type": "Microsoft.Web/sites",
+    "name": "[variables('adminWebName')]",
+    "apiVersion": "2015-08-01-preview",
+    "location": "[parameters('Location')]",
+    "properties": {
+      "name": "[variables('adminWebName')]",
+      "hostNames": [
+        "[variables('adminWebSiteName')]"
+      ],
+      "enabledHostNames": [
+        "[variables('adminWebSiteName')]",
+        "[variables('adminWebScmSiteName')]"
+      ],
+      "hostNameSslStates": [{
+        "name": "[variables('adminWebSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }, {
+        "name": "[variables('adminWebScmSiteName')]",
+        "sslState": 0,
+        "thumbprint": null,
+        "ipBasedSslState": 0
+      }],
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('adminWebPlanName')))]"
+    },
+    "dependsOn": [
+      "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('adminWebPlanName')))]"
+    ]
+  }]
+}
