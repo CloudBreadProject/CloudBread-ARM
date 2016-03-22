@@ -9,8 +9,6 @@ CloudBread-ARM project is using Microsoft Azure Resource Manager for automatic s
 3. Others(Socket, Database, Noti) deployment  
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fothersdeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
 
-[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
-
 ### Resources info
 Resource naming comvention
  * properName-CloudBread-Role-ResourceType-stagingStatus-dataCenterLocation
