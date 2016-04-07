@@ -23,13 +23,13 @@
   "variables": {
     "postfixName": "[parameters('postfixAppName')]",
     "fePlanName": "-cb-fe-asp-dev",
-    "apiAppName": "-cb-fe-aa-dev",
+    "mobileAppName": "-cb-fe-ma-dev",
 
     "url": ".azurewebsites.net",
     "urlScm": ".scm.azurewebsites.net",
-    "apiName": "[concat(variables('postfixName'),variables('apiAppName'))]",
-    "apiSiteName": "[concat(variables('apiName'),variables('url'))]",
-    "apiScmSiteName": "[concat(variables('apiName'),variables('urlScm'))]"
+    "mobileName": "[concat(variables('postfixName'),variables('mobileAppName'))]",
+    "mobileSiteName": "[concat(variables('mobileName'),variables('url'))]",
+    "mobileScmSiteName": "[concat(variables('mobileName'),variables('urlScm'))]"
   },
   "resources": [{
  "type": "Microsoft.Web/serverfarms",
@@ -43,26 +43,26 @@
  }
 }, {
     "type": "Microsoft.Web/sites",
-    "kind": "api",
-    "name": "[variables('apiName')]",
+    "kind": "mobileapp",
+    "name": "[variables('mobileName')]",
     "apiVersion": "2015-08-01-preview",
     "location": "[parameters('Location')]",
     "properties": {
-      "name": "[variables('apiName')]",
+      "name": "[variables('mobileName')]",
       "hostNames": [
-        "[variables('apiSiteName')]"
+        "[variables('mobileSiteName')]"
       ],
       "enabledHostNames": [
-        "[variables('apiSiteName')]",
-        "[variables('apiScmSiteName')]"
+        "[variables('mobileSiteName')]",
+        "[variables('mobileScmSiteName')]"
       ],
       "hostNameSslStates": [{
-        "name": "[variables('apiSiteName')]",
+        "name": "[variables('mobileSiteName')]",
         "sslState": 0,
         "thumbprint": null,
         "ipBasedSslState": 0
       }, {
-        "name": "[variables('apiScmSiteName')]",
+        "name": "[variables('mobileScmSiteName')]",
         "sslState": 0,
         "thumbprint": null,
         "ipBasedSslState": 0

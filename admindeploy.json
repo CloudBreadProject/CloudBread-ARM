@@ -22,19 +22,19 @@
   },
   "variables": {
     "postfixName": "[parameters('postfixAppName')]",
-    "adminWebPlanName": "-cb-adminweb-asp-dev",
-    "adminWebAppName": "-cb-adminweb-wa-dev",
+    "adminApiPlanName": "-cb-adminApi-asp-dev",
+    "adminApiAppName": "-cb-adminApi-aa-dev",
 
     "url": ".azurewebsites.net",
     "urlScm": ".scm.azurewebsites.net",
-    "adminWebName": "[concat(variables('postfixName'),variables('adminWebAppName'))]",
-    "adminWebSiteName": "[concat(variables('adminWebName'),variables('url'))]",
-    "adminWebScmSiteName": "[concat(variables('adminWebName'),variables('urlScm'))]"
+    "adminApiName": "[concat(variables('postfixName'),variables('adminApiAppName'))]",
+    "adminApiSiteName": "[concat(variables('adminApiName'),variables('url'))]",
+    "adminApiScmSiteName": "[concat(variables('adminApiName'),variables('urlScm'))]"
   },
   "resources": [{
   "type": "Microsoft.Web/serverfarms",
   "apiVersion": "2015-08-01",
-  "name": "[concat(variables('postfixName'),variables('adminWebPlanName'))]",
+  "name": "[concat(variables('postfixName'),variables('adminApiPlanName'))]",
   "location": "[parameters('Location')]",
   "sku": {
     "name": "F1",
@@ -43,33 +43,34 @@
   }
 }, {
     "type": "Microsoft.Web/sites",
-    "name": "[variables('adminWebName')]",
+    "kind": "api",
+    "name": "[variables('adminApiName')]",
     "apiVersion": "2015-08-01-preview",
     "location": "[parameters('Location')]",
     "properties": {
-      "name": "[variables('adminWebName')]",
+      "name": "[variables('adminApiName')]",
       "hostNames": [
-        "[variables('adminWebSiteName')]"
+        "[variables('adminApiSiteName')]"
       ],
       "enabledHostNames": [
-        "[variables('adminWebSiteName')]",
-        "[variables('adminWebScmSiteName')]"
+        "[variables('adminApiSiteName')]",
+        "[variables('adminApiScmSiteName')]"
       ],
       "hostNameSslStates": [{
-        "name": "[variables('adminWebSiteName')]",
+        "name": "[variables('adminApiSiteName')]",
         "sslState": 0,
         "thumbprint": null,
         "ipBasedSslState": 0
       }, {
-        "name": "[variables('adminWebScmSiteName')]",
+        "name": "[variables('adminApiScmSiteName')]",
         "sslState": 0,
         "thumbprint": null,
         "ipBasedSslState": 0
       }],
-      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('adminWebPlanName')))]"
+      "serverFarmId": "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('adminApiPlanName')))]"
     },
     "dependsOn": [
-      "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('adminWebPlanName')))]"
+      "[resourceId('Microsoft.Web/serverFarms', concat(variables('postfixName'),variables('adminApiPlanName')))]"
     ]
   }]
 }
