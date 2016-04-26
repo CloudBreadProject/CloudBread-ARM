@@ -59,7 +59,7 @@
     "properties": {
       "sku": {
         "name": "Basic",
-        "family": "C",
+        "family": "c",
         "capacity": 0
       },
       "enableNonSslPort": false,
