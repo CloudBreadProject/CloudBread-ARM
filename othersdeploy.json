@@ -62,12 +62,7 @@
         "family": "c",
         "capacity": 0
       },
-      "enableNonSslPort": false,
-      "redisConfiguration": {
-        "maxclients": "1000",
-        "maxmemory-reserved": "50",
-        "maxmemory-delta": "50"
-      }
+      "enableNonSslPort": false
     }
   }, {
     "type": "Microsoft.NotificationHubs/namespaces",
