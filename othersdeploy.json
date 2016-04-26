@@ -58,9 +58,9 @@
     "location": "[parameters('Location')]",
     "properties": {
       "sku": {
-        "name": "Standard",
+        "name": "Basic",
         "family": "C",
-        "capacity": 1
+        "capacity": 0
       },
       "enableNonSslPort": false,
       "redisConfiguration": {
