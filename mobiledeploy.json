@@ -22,8 +22,8 @@
   },
   "variables": {
     "postfixName": "[parameters('postfixAppName')]",
-    "fePlanName": "-cb-fe-asp-dev",
-    "mobileAppName": "-cb-fe-ma-dev",
+    "fePlanName": "-ma-plan",
+    "mobileAppName": "-ma",
 
     "url": ".azurewebsites.net",
     "urlScm": ".scm.azurewebsites.net",

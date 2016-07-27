@@ -22,8 +22,8 @@
   },
   "variables": {
     "postfixName": "[parameters('postfixAppName')]",
-    "adminApiPlanName": "-cb-adminApi-asp-dev",
-    "adminApiAppName": "-cb-adminApi-aa-dev",
+    "adminApiPlanName": "-Api-plan",
+    "adminApiAppName": "-Api",
 
     "url": ".azurewebsites.net",
     "urlScm": ".scm.azurewebsites.net",

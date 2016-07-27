@@ -36,11 +36,11 @@
   "variables": {
     "postfixName": "[parameters('postfixAppName')]",
     "redisName": "-cb-redis-dev",
-    "sqlServerName": "-cb-sqlsvr-dev",
-    "sqlDBName": "-cb-sqldb-dev",
+    "sqlServerName": "-sqlsvr",
+    "sqlDBName": "-sqldb",
     "storAccName": "cbstrdev",
-    "socketPlanName": "-cb-socket-asp-dev",
-    "socketAppName": "-cb-socket-wa-dev",
+    "socketPlanName": "-app-plan",
+    "socketAppName": "-app",
     "notificationHubName": "-cb-push-nh-dev",
     "notiNamespace": "cbpushnndev",
 
