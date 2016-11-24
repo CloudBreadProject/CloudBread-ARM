@@ -110,19 +110,7 @@
         "requestedServiceObjectiveName": null,
         "containmentState": 2
       }
-    }, {
-      "apiVersion": "2014-04-01-preview",
-      "dependsOn": [
-        "[concat('Microsoft.Sql/servers/', concat(variables('postfixName'),variables('sqlServerName')))]"
-      ],
-      "location": "[parameters('Location')]",
-      "name": "AllowAllWindowsAzureIps",
-      "properties": {
-        "endIpAddress": "0.0.0.0",
-        "startIpAddress": "0.0.0.0"
-      },
-      "type": "firewallrules"
-    }]
+    }, ]
   }, {
     "type": "Microsoft.Storage/storageAccounts",
     "name": "[concat(variables('postfixName'),variables('storAccName'))]",
