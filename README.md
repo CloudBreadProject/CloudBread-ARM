@@ -7,7 +7,7 @@ CloudBread-ARM project is using Microsoft Azure Resource Manager for automatic s
 2. Admin web page deployment  
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fadmindeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
 3. Others(Socket, Database, Noti) deployment  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fothersdeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadPaPa%2FCloudBread-ARM%2Fmaster%2Fothersdeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
 
 ### Resources info
 Resource naming comvention
