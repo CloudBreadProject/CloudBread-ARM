@@ -75,3 +75,29 @@ Web App(Socket)|socket page.
 7.Now, Continuous deployment success!
 
 ![](./cb-arm-direction/automationCD/arm-auto05.png)
+
+#### Limiation of BizSaprk datacenter region issue
+Regarding to BizSpark enroll duration, deployment on some region limited - reported from facebook group Jung Hoon Baek.
+- Could not select Japan area but Southeast Asia.
+
+It's limitation of BizSaprk program.
+
+By default, CloudBread is using Japan, East Asia. You might need to change ARM script region and execute it on your machine.  
+https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-overview  
+
+Refer issue #22 - https://github.com/CloudBreadProject/CloudBread-ARM/issues/22  
+```
+"code": "40856",  
+  "message": "Location 'Japan West' is not accepting creation of new Azure SQL Database Servers of version '12.0' at this time.  This location only supports the following server versions: ''.  Please retry using a supported server version.",  
+  "target": null,  
+  "details": [  
+    {  
+      "code": "40856",  
+      "message": "Location 'Japan West' is not accepting creation of new Azure SQL Database Servers of version '12.0' at this time.  This location only supports the following server versions: ''.  Please retry using a supported server version.",
+      "target": null,
+      "severity": "16"  
+    }  
+  ],  
+  "innererror": []  
+}  
+```
