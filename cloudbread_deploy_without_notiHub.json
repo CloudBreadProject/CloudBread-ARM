@@ -136,12 +136,12 @@
                 }
         },
         "variables": {
-                "hostingPlanName": "[concat('hostingplan-', uniqueString(resourceGroup().id))]",
-                "webSiteName": "[concat('webSite-', uniqueString(resourceGroup().id))]",
-                "sqlserverName": "[concat('sqlserver-', uniqueString(resourceGroup().id))]",
-                "cacheName": "[concat('cache-', uniqueString(resourceGroup().id))]",
-                "adminWebName": "[concat('CBAdminWeb-', uniqueString(resourceGroup().id))]",
-                "socketName": "[concat('CBSocket-', uniqueString(resourceGroup().id))]",
+                "hostingPlanName": "[concat('HostingPlan-', uniqueString(resourceGroup().id))]",
+                "webSiteName": "[concat('cb-core-', uniqueString(resourceGroup().id))]",
+                "sqlserverName": "[concat('cb-sqlserver-', uniqueString(resourceGroup().id))]",
+                "cacheName": "[concat('cb-redis-', uniqueString(resourceGroup().id))]",
+                "adminWebName": "[concat('cb-adminweb-', uniqueString(resourceGroup().id))]",
+                "socketName": "[concat('cb-socket-', uniqueString(resourceGroup().id))]",
                 "storageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', parameters('storageName'))]"
         },
         "resources": [
