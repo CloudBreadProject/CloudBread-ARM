@@ -2,6 +2,30 @@
         "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
         "contentVersion": "1.0.0.0",
         "parameters": {
+                "administratorLogin": {
+                        "type": "string",
+                        "metadata": {
+                                "description": "The admin user of the SQL Server"
+                        }
+                },
+                "administratorLoginPassword": {
+                        "type": "securestring",
+                        "metadata": {
+                                "description": "The password of the admin user of the SQL Server"
+                        }
+                },
+                "databaseName": {
+                        "type": "string",
+                        "metadata": {
+                                "description": "The name of the new database to create."
+                        }
+                },
+                "storageName": {
+                        "type": "string",
+                        "metadata": {
+                                "description": "The name of the new database to create."
+                        }
+                },
                 "skuName": {
                         "type": "string",
                         "defaultValue": "F1",
@@ -29,24 +53,6 @@
                         "minValue": 1,
                         "metadata": {
                                 "description": "Describes plan's instance count"
-                        }
-                },
-                "administratorLogin": {
-                        "type": "string",
-                        "metadata": {
-                                "description": "The admin user of the SQL Server"
-                        }
-                },
-                "administratorLoginPassword": {
-                        "type": "securestring",
-                        "metadata": {
-                                "description": "The password of the admin user of the SQL Server"
-                        }
-                },
-                "databaseName": {
-                        "type": "string",
-                        "metadata": {
-                                "description": "The name of the new database to create."
                         }
                 },
                 "collation": {
@@ -135,8 +141,8 @@
                 "sqlserverName": "[concat('sqlserver-', uniqueString(resourceGroup().id))]",
                 "cacheName": "[concat('cache-', uniqueString(resourceGroup().id))]",
                 "adminWebName": "[concat('CBAdminWeb-', uniqueString(resourceGroup().id))]",
-                "storageName": "[concat('STORAGE_', uniqueString(resourceGroup().id))]",
-                "socketName": "[concat('CBSocket-', uniqueString(resourceGroup().id))]"
+                "socketName": "[concat('CBSocket-', uniqueString(resourceGroup().id))]",
+                "storageAccountId": "[concat(resourceGroup().id,'/providers/Microsoft.Storage/storageAccounts/', parameters('storageName'))]"
         },
         "resources": [
                 { // SQL Server
@@ -235,7 +241,7 @@
                                                         "type": "SQLServer"
                                                 },
                                                 "CloudBreadStorageConString": {
-                                                        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)",
+                                                        "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageName'),';AccountKey=',concat(listKeys(variables('storageAccountId'),'2015-05-01-preview').key1))]",
                                                         "type": "Custom"
                                                 }
                                         }
@@ -249,7 +255,9 @@
                                                 "[concat('Microsoft.Cache/Redis/', variables('cacheName'))]"
                                         ],
                                         "properties": {
-                                                "CacheConnection": "[concat(variables('cacheName'),'.redis.cache.windows.net,abortConnect=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('cacheName')), '2015-08-01').primaryKey)]"
+                                                "CloudBreadSocketRedisServer": "[concat(variables('cacheName'),'.redis.cache.windows.net,abortConnect=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('cacheName')), '2015-08-01').primaryKey)]",
+                                                "CloudBreadRankRedisServer":"[concat(variables('cacheName'),'.redis.cache.windows.net,abortConnect=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('cacheName')), '2015-08-01').primaryKey)]",
+                                                "CloudBreadGameLogRedisServer":"[concat(variables('cacheName'),'.redis.cache.windows.net,abortConnect=false,ssl=true,password=', listKeys(resourceId('Microsoft.Cache/Redis', variables('cacheName')), '2015-08-01').primaryKey)]"
                                         }
                                 }
                         ]
@@ -292,7 +300,7 @@
                         "resources": []
                 },
                 { // Storage Accounts
-                        "name": "[variables('storageName')]",
+                        "name": "[parameters('storageName')]",
                         "type": "Microsoft.Storage/storageAccounts",
                         "location": "[resourceGroup().location]",
                         "apiVersion": "2015-06-15",
