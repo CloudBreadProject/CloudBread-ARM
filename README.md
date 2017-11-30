@@ -1,37 +1,45 @@
-### CloudBread-ARM
-This porject is automatic provision script for CloudBread service instances on Cloud.
+## CloudBread-ARM
+This project is automatic provision script for CloudBread service instances on Cloud.
 
-CloudBread-ARM project is using Microsoft Azure Resource Manager for automatic service deployment.  
-1. Mobile App deployment  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fmobiledeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
-2. Admin web page deployment  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fadmindeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
-3. Others(Socket, Database, Noti) deployment  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fothersdeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
+This document introduces the recipe for the deploy CloudBread to Azure. First, we deploy Azure resources used in CloudBread with ARM (Azure Resource Manager). Next, we install CloudBread on the resources we deployed in the previous step. Finally, we need to create database.
+Now, you can deploy your game server very easy with this document.
 
-### Resources info
-Resource naming comvention
+### 1. Deploy resources used in CloudBread into Azure
+We will use ARM(Microsoft Azure Resource Manager). It is very powerful tools for automatic deployment on Azure.  
+
+1. Deploy resources.
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fyshong93%2FCloudBread-ARM%2Fmaster%2Fdeploy%2Frelesase%202.0.1%2Fdeploy_without_notihub.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
+
+#### Parameter info
+When you click upper buttons, maybe you can see Microsoft Azure Template Deploy Pages, and then you have to write this parameters. Red star mark is the required parameters.
+
+|isrequired|Parameter Name|Remarks|
+|---|---|---|
+|*|
+
+
  * properName-CloudBread-Role-ResourceType-stagingStatus-dataCenterLocation
 
  ex) redis name: jhapp-cb-redis-dev-jp
 
+#### Generated Resources
 
- * Detail info
+|Name|Resource|Detail|
+|---|---|---|
+|Group Name|Resource Group|Created new, or used the established resource group.|
+|cb-core-```<GroupID>```|Mobile App|
+|cb-redis-```<GroupID>```|Redis|For the leader board (ranking system), handling massive game log data saving queue, real time socket Authentication.|
+|cb-sqlserver-```<GroupID>```|SQL Server||
+|cloudbreadDB|SQL Database| |
+|cbstorage2|Storage Account||
+|HostingPlan-```<GroupID>```|App Service Plan||
+|cb-adminweb-```<GroupID>```|API App||
+|cb-socket-```<GroupID>```|API App||
 
-Resource|Detail
----|---|
-Resource Group|Created new, or used the established resource group.
-Redis|For the leader board (ranking system), handling massive game log data saving queue, real time socket Authentication.
-Noti Namespace|Namespace of notification hubs.
-Notification Hubs|Notitfication hub for the push alarm.
-Server Name|Sql server for application.
-Database Name|Azure Relational database.
-Storage Accounts Name|[Key : Value] type Database for saving game log.
-Mobile App|mobile app.
-Admin Web App|admin web page.
-Web App(Socket)|socket page.
+	* ```<GroupID>``` is generated automatically wi Resource Group.
 
-### Direction
+
+#### Direction
 1.Fork the Cloudbread-ARM to personal repository.
 
 ![](./cb-arm-direction/deployment/cb-arm-fork.png)
@@ -49,8 +57,11 @@ Web App(Socket)|socket page.
 5.Wait a minute, and then deployment was completed!
 
 
-
-#### And then, follow the Continuous Deployment with automation
+### 2. Install CloudBread on the resources
+We use the Continuous Deployment. This is very convenient to use with GitHub's repositories.
+1. Now you have to clone CloudBread repository.
+2. Install CloudBread using Azure Continuous Deployment tools.
+And then, follow the Continuous Deployment with automation
 1.Fork the Cloudbread project to personal repository.
 
 2.Enter the Azure cloud portal site.
@@ -75,6 +86,9 @@ Web App(Socket)|socket page.
 7.Now, Continuous deployment success!
 
 ![](./cb-arm-direction/automationCD/arm-auto05.png)
+
+### 3. Create database for CloudBread
+
 
 #### Limiation of BizSaprk datacenter region issue
 Regarding to BizSpark enroll duration, deployment on some region limited - reported from facebook group Jung Hoon Baek.
