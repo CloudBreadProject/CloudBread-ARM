@@ -136,7 +136,8 @@
                 }
         },
         "variables": {
-                "hostingPlanName": "[concat('HostingPlan-', uniqueString(resourceGroup().id))]",
+                "hostingPlanName": "[concat('cb-core-hostingplan-', uniqueString(resourceGroup().id))]",
+                "subHostingPlanName": "[concat('cb-sub-hostingplan-', uniqueString(resourceGroup().id))]",
                 "webSiteName": "[concat('cb-core-', uniqueString(resourceGroup().id))]",
                 "sqlserverName": "[concat('cb-sqlserver-', uniqueString(resourceGroup().id))]",
                 "cacheName": "[concat('cb-redis-', uniqueString(resourceGroup().id))]",
@@ -206,6 +207,22 @@
                         },
                         "properties": {
                                 "name": "[variables('hostingPlanName')]"
+                        }
+                },
+                { 
+                        "apiVersion": "2015-08-01",
+                        "name": "[variables('subHostingPlanName')]",
+                        "type": "Microsoft.Web/serverfarms",
+                        "location": "[resourceGroup().location]",
+                        "tags": {
+                                "displayName": "HostingPlan"
+                        },
+                        "sku": {
+                                "name": "[parameters('skuName')]",
+                                "capacity": "[parameters('skuCapacity')]"
+                        },
+                        "properties": {
+                                "name": "[variables('subHostingPlanName')]"
                         }
                 },
                 { 
@@ -286,16 +303,16 @@
                         "kind": "api",
                         "location": "[resourceGroup().location]",
                         "dependsOn": [
-                                "[concat('Microsoft.Web/serverFarms/', variables('hostingPlanName'))]",
+                                "[concat('Microsoft.Web/serverFarms/', variables('subHostingPlanName'))]",
                                 "[concat('Microsoft.Cache/Redis/', variables('cacheName'))]"
                         ],
                         "tags": {
-                                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]": "empty",
+                                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('subHostingPlanName'))]": "empty",
                                 "displayName": "AdminWebsite"
                         },
                         "properties": {
                                 "name": "[variables('adminWebName')]",
-                                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+                                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('subHostingPlanName'))]"
                         },
                         "resources": []
                 },
@@ -315,16 +332,16 @@
                         "kind": "api",
                         "location": "[resourceGroup().location]",
                         "dependsOn": [
-                                "[concat('Microsoft.Web/serverFarms/', variables('hostingPlanName'))]",
+                                "[concat('Microsoft.Web/serverFarms/', variables('subHostingPlanName'))]",
                                 "[concat('Microsoft.Cache/Redis/', variables('cacheName'))]"
                         ],
                         "tags": {
-                                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('hostingPlanName'))]": "empty",
+                                "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/', variables('subHostingPlanName'))]": "empty",
                                 "displayName": "SocketWebServer"
                         },
                         "properties": {
                                 "name": "[variables('socketName')]",
-                                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]"
+                                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('subHostingPlanName'))]"
                         },
                         "resources": []
                 }
