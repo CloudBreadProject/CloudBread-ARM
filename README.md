@@ -1,4 +1,4 @@
-# CloudBread-ARM
+#  CloudBread-ARM
 This project is automatic provision script for CloudBread service instances on Cloud.
 
 This document introduces the recipe for the deploy CloudBread to Azure. First, we deploy Azure resources used in CloudBread with ARM (Azure Resource Manager). Next, we install CloudBread on the resources we deployed in the previous step. Finally, we need to create database.
@@ -11,26 +11,28 @@ We will use ARM(Microsoft Azure Resource Manager). It is very powerful tools for
 
 **2) Click the [Deploy to Azure] button.**
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fyshong93%2FCloudBread-ARM%2Fmaster%2Fdeploy%2Frelesase%202.0.1%2Fdeploy_without_notihub.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fdeploy%2Frelesase%202.0.1%2Fdeploy_without_notihub.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
 ___Please click the button above.___
 
 **3) Make a new resource group, or use the existed resource group.**
+
 ![](./cb-arm-direction/deployment/cb-arm-deploy02.png)
 
 **4) Fill in the blanks about parameter. and Click the [OK] button.**
 
 you can see the detailed explanation for the parameters.
+
 ![](./cb-arm-direction/deployment/cb-arm-deploy01.png)
 
 #### Parameter info
 When you click upper buttons, maybe you can see Microsoft Azure Template Deploy Pages, and then you have to write this parameters. Red star mark is the required parameters.
 
-|Required|Parameter Name|Remarks|
-|---|---|---|
-|*|Administrator Login|This is for SQL Server. It will be used for SQL User ID.|
-|*|Administrator Login Password|This is for SQL Server, too. It will be used for SQL User Password.|
-|*|Database Name|This parameter is for Database name|
-|*|Storage Name|This is Storage Account. So you can't use duplicated string account like ID.|
+| Required | Parameter Name               | Remarks                                  |
+| -------- | ---------------------------- | ---------------------------------------- |
+| *        | Administrator Login          | This is for SQL Server. It will be used for SQL User ID. |
+| *        | Administrator Login Password | This is for SQL Server, too. It will be used for SQL User Password. |
+| *        | Database Name                | This parameter is for Database name      |
+| *        | Storage Name                 | This is Storage Account. So you can't use duplicated string account like ID. |
 
 ___you must remember the parameters marked with required in the table above. They're admin account for CloudBread's DB and storage.___
 
@@ -38,17 +40,18 @@ ___you must remember the parameters marked with required in the table above. The
 
 #### Generated Resources
 
-|Name|Resource|Detail|
-|---|---|---|
-|Group Name|Resource Group||
-|cb-core-```<GroupID>```|Mobile App|This is a very important part. This is a **core server** that communicates with users' smartphones.|
-|cb-redis-```<GroupID>```|Redis|It is a redis cache server for quickly processing user data in database. (_i.g.the leader board, handling massive game log data saving queue, real time socket Authentication and so on._)|
-|cb-sqlserver-```<GroupID>```|SQL Server||
-|```<Database Name>```|SQL Database| |
-|```<Storage Name>```|Storage Account||
-|HostingPlan-```<GroupID>```|App Service Plan||
-|cb-adminweb-```<GroupID>```|API App||
-|cb-socket-```<GroupID>```|API App||
+| Name                                | Resource         | Detail                                   |
+| ----------------------------------- | ---------------- | ---------------------------------------- |
+| Group Name                          | Resource Group   |                                          |
+| cb-core-```<GroupID>```             | Mobile App       | This is a very important part. This is a **core server** that communicates with users' smartphones. |
+| cb-redis-```<GroupID>```            | Redis            | It is a redis cache server for quickly processing user data in database. (_i.g.the leader board, handling massive game log data saving queue, real time socket Authentication and so on._) |
+| cb-sqlserver-```<GroupID>```        | SQL Server       |                                          |
+| ```<Database Name>```               | SQL Database     | CloudBread Database.                     |
+| ```<Storage Name>```                | Storage Account  |                                          |
+| cb-core-hostingplan-```<GroupID>``` | App Service Plan | It is ***Hosting Plan*** for cb-core-```<GroupID>```. If you want to do up-scale or down-scale, change this plan. |
+| cb-sub-hostingplan-```<GroupID>```  | App Service Plan | It is ***Hosting Plan*** for cb-adminweb-```<GroupID>``` and cb-socket-```<GroupID>```. |
+| cb-adminweb-```<GroupID>```         | API App          | It is for admin web included in CloudBread Projects. |
+| cb-socket-```<GroupID>```           | API App          | This is used as authentication server for socket server. |
 
 	* ```<GroupID>``` is generated automatically with Resource Group.
 
@@ -56,24 +59,23 @@ ___you must remember the parameters marked with required in the table above. The
 ## 2. Install CloudBread on the resources
 We use the Continuous Deployment. This is very convenient to use with GitHub's repositories.
 
-**1) Now you have to go to CloudBread repository and clone it.**
+**1) Now you have to go to CloudBread repository and clone it to your personal repository.**
 
-**2) Install CloudBread using Azure Continuous Deployment tools.**
+**2) Open your Azure Cloud Portal, and go to your resource group deployed before.**
 
-And then, follow the Continuous Deployment with automation
-1.Fork the Cloudbread project to personal repository.
+**3) Find Mobile App and click it.** (Maybe its name is cb-core-```<GroupID>```)
 
-2.Enter the Azure cloud portal site.
 
-3.In the resource group, find the MobileApp and click it.
 
 ![](./cb-arm-direction/automationCD/arm-auto01.png)
 
-4.In the MobileApp, click setting and find Continuous deployment.
+**4) In the MobileApp, click setting and find Continuous deployment.**
 
 ![](./cb-arm-direction/automationCD/arm-auto02.png)
 
-5.Choose source what you want.
+**5) Choose source what you want.**
+
+
 
 ![](./cb-arm-direction/automationCD/arm-auto03.png)
 
@@ -87,7 +89,13 @@ And then, follow the Continuous Deployment with automation
 ![](./cb-arm-direction/automationCD/arm-auto05.png)
 
 ## 3. Create database for CloudBread
+This is final steps for use CloudBread Game Server. 
+
 Now you can see this documents.
+
+https://github.com/CloudBreadProject/CloudBread-DB-Install-Script
+
+
 
 
 ## Limiation of BizSaprk datacenter region issue
