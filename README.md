@@ -1,69 +1,81 @@
-### CloudBread-ARM
-This porject is automatic provision script for CloudBread service instances on Cloud.
+#  CloudBread-ARM
+This project is automatic provision script for CloudBread service instances on Cloud.
 
-CloudBread-ARM project is using Microsoft Azure Resource Manager for automatic service deployment.  
-1. Mobile App deployment  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fmobiledeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
-2. Admin web page deployment  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fadmindeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
-3. Others(Socket, Database, Noti) deployment  
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fothersdeploy.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
+This document introduces the recipe for the deploy CloudBread to Azure. First, we deploy Azure resources used in CloudBread with ARM (Azure Resource Manager). Next, we install CloudBread on the resources we deployed in the previous step. Finally, we need to create database.
+Now, you can deploy your game server very easy with this document.
 
-### Resources info
-Resource naming comvention
- * properName-CloudBread-Role-ResourceType-stagingStatus-dataCenterLocation
+## 1. Deploy resources used in CloudBread to Azure
+We will use ARM(Microsoft Azure Resource Manager). It is very powerful tools for automatic deployment on Azure.
 
- ex) redis name: jhapp-cb-redis-dev-jp
+**1) Fork the Cloudbread-ARM to personal repository.**
 
+**2) Click the [Deploy to Azure] button.**
 
- * Detail info
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FCloudBreadProject%2FCloudBread-ARM%2Fmaster%2Fdeploy%2Frelesase%202.0.1%2Fdeploy_without_notihub.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png"/></a>  
+___Please click the button above.___
 
-Resource|Detail
----|---|
-Resource Group|Created new, or used the established resource group.
-Redis|For the leader board (ranking system), handling massive game log data saving queue, real time socket Authentication.
-Noti Namespace|Namespace of notification hubs.
-Notification Hubs|Notitfication hub for the push alarm.
-Server Name|Sql server for application.
-Database Name|Azure Relational database.
-Storage Accounts Name|[Key : Value] type Database for saving game log.
-Mobile App|mobile app.
-Admin Web App|admin web page.
-Web App(Socket)|socket page.
-
-### Direction
-1.Fork the Cloudbread-ARM to personal repository.
-
-![](./cb-arm-direction/deployment/cb-arm-fork.png)
-
-2.Click the [Deploy to Azure] button.
-
-3.Fill in the blanks about parameter. and Click the [OK] button.
-
-![](./cb-arm-direction/deployment/cb-arm-deploy01.png)
-
-4.Make a new resource group, or use the existed resource group.
+**3) Make a new resource group, or use the existed resource group.**
 
 ![](./cb-arm-direction/deployment/cb-arm-deploy02.png)
 
-5.Wait a minute, and then deployment was completed!
+**4) Fill in the blanks about parameter. and Click the [OK] button.**
+
+you can see the detailed explanation for the parameters.
+
+![](./cb-arm-direction/deployment/cb-arm-deploy01.png)
+
+#### Parameter info
+When you click upper buttons, maybe you can see Microsoft Azure Template Deploy Pages, and then you have to write this parameters. Red star mark is the required parameters.
+
+| Required | Parameter Name               | Remarks                                  |
+| -------- | ---------------------------- | ---------------------------------------- |
+| *        | Administrator Login          | This is for SQL Server. It will be used for SQL User ID. |
+| *        | Administrator Login Password | This is for SQL Server, too. It will be used for SQL User Password. |
+| *        | Database Name                | This parameter is for Database name      |
+| *        | Storage Name                 | This is Storage Account. So you can't use duplicated string account like ID. |
+
+___you must remember the parameters marked with required in the table above. They're admin account for CloudBread's DB and storage.___
+
+**5) Wait for 15~20 minutes, and then deployment was completed!**
+
+#### Generated Resources
+
+| Name                                | Resource         | Detail                                   |
+| ----------------------------------- | ---------------- | ---------------------------------------- |
+| Group Name                          | Resource Group   |                                          |
+| cb-core-```<GroupID>```             | Mobile App       | This is a very important part. This is a **core server** that communicates with users' smartphones. |
+| cb-redis-```<GroupID>```            | Redis            | It is a redis cache server for quickly processing user data in database. (_i.g.the leader board, handling massive game log data saving queue, real time socket Authentication and so on._) |
+| cb-sqlserver-```<GroupID>```        | SQL Server       |                                          |
+| ```<Database Name>```               | SQL Database     | CloudBread Database.                     |
+| ```<Storage Name>```                | Storage Account  |                                          |
+| cb-core-hostingplan-```<GroupID>``` | App Service Plan | It is ***Hosting Plan*** for cb-core-```<GroupID>```. If you want to do up-scale or down-scale, change this plan. |
+| cb-sub-hostingplan-```<GroupID>```  | App Service Plan | It is ***Hosting Plan*** for cb-adminweb-```<GroupID>``` and cb-socket-```<GroupID>```. |
+| cb-adminweb-```<GroupID>```         | API App          | It is for admin web included in CloudBread Projects. |
+| cb-socket-```<GroupID>```           | API App          | This is used as authentication server for socket server. |
+
+	* ```<GroupID>``` is generated automatically with Resource Group.
 
 
+## 2. Install CloudBread on the resources
+We use the Continuous Deployment. This is very convenient to use with GitHub's repositories.
 
-#### And then, follow the Continuous Deployment with automation
-1.Fork the Cloudbread project to personal repository.
+**1) Now you have to go to CloudBread repository and clone it to your personal repository.**
 
-2.Enter the Azure cloud portal site.
+**2) Open your Azure Cloud Portal, and go to your resource group deployed before.**
 
-3.In the resource group, find the MobileApp and click it.
+**3) Find Mobile App and click it.** (Maybe its name is cb-core-```<GroupID>```)
+
+
 
 ![](./cb-arm-direction/automationCD/arm-auto01.png)
 
-4.In the MobileApp, click setting and find Continuous deployment.
+**4) In the MobileApp, click setting and find Continuous deployment.**
 
 ![](./cb-arm-direction/automationCD/arm-auto02.png)
 
-5.Choose source what you want.
+**5) Choose source what you want.**
+
+
 
 ![](./cb-arm-direction/automationCD/arm-auto03.png)
 
@@ -76,7 +88,17 @@ Web App(Socket)|socket page.
 
 ![](./cb-arm-direction/automationCD/arm-auto05.png)
 
-#### Limiation of BizSaprk datacenter region issue
+## 3. Create database for CloudBread
+This is final steps for use CloudBread Game Server. 
+
+Now you can see this documents.
+
+https://github.com/CloudBreadProject/CloudBread-DB-Install-Script
+
+
+
+
+## Limiation of BizSaprk datacenter region issue
 Regarding to BizSpark enroll duration, deployment on some region limited - reported from facebook group Jung Hoon Baek.
 - Could not select Japan area but Southeast Asia.
 
